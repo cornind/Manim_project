@@ -1,11 +1,29 @@
 import numpy as np
 from manim import *
 
+class CopyrightLabel(VMobject):
+    def __init__(self, copyright_text="© 2024 Cornind", font_size=24, color=GRAY, **kwargs):
+        super().__init__(**kwargs)
+        self.text = MarkupText(
+            f'<span color="{color.to_hex()}"> {copyright_text}</span>',
+            font_size=font_size
+        )
+        self.text.to_edge( RIGHT)
+        self.add(self.text)
+
 
 class Convexer(Scene):
     def construct(self):
+        self.camera.background_color = WHITE
+        MathTex.set_default(color=BLACK)
+        Tex.set_default(color=BLACK)
+
+        copyright = CopyrightLabel()
+        self.add(copyright)
         axes1 = Axes([-0.5, 7.5], [-0.5, 7.5],
-                     axis_config={"include_numbers": True})
+                     axis_config={"include_numbers": True},
+                     x_axis_config={"color": BLACK},
+                     y_axis_config={"color":BLACK})
         self.play(Create(axes1))
 
         # 创建点并添加标签
@@ -55,7 +73,8 @@ class Convexer(Scene):
             label = MathTex(f"({point[0]}, {point[1]})").next_to(dot, UP)
             dot.add(label)
             ndots.add(dot)
-            arrow = Line(start=axes1.c2p(point[0], 0), end=axes1.c2p(point[0], point[1]), color=BLUE_A, stroke_width=2)
+            arrow = DashedLine(start=axes1.c2p(point[0], 0),
+                         end=axes1.c2p(point[0], point[1]), color=BLUE_D, stroke_width=6)
             ARROWS.add(arrow)
             self.play(Create(arrow), Create(dot), run_time=0.35)
 
@@ -81,15 +100,15 @@ class Convexer(Scene):
         self.play(*[*[Transform(dot, new_dots[i]) for i, dot in enumerate(dots)],
                     *[Transform(line, new_lines[i]) for i, line in enumerate(lines)]],
                   run_time=1)
-        self.wait(1)
+        self.wait(3)
 
 
 if __name__ == "__main__":
     from manim import config
 
-    config["output_file"] = "output/video"  # 指定保存路径
-    config.format = "mp4"  # 直接生成 GIF
-    config.quality = "medium_quality"
+    config["output_file"] = "Convexer"  # 指定保存路径
+    config.format = "gif"  # 直接生成 GIF
+    config.quality = "low_quality"
     # 渲染视频
     scene = Convexer()
 

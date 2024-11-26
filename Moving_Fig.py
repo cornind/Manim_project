@@ -6,7 +6,7 @@ from manim import *
 import scipy.signal
 
 class CopyrightLabel(VMobject):
-    def __init__(self, copyright_text="© 2024 Cornind", font_size=24, color=WHITE, **kwargs):
+    def __init__(self, copyright_text="© 2024 Cornind", font_size=24, color=LIGHTER_GRAY, **kwargs):
         super().__init__(**kwargs)
         self.text = MarkupText(
             f'<span color="{color.to_hex()}"> {copyright_text}</span>',
